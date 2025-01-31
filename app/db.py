@@ -5,11 +5,6 @@ def get_db():
     """Establish a database connection if one does not exist"""
     if 'db' not in g:
         config = current_app.config['DATABASE']  # Use Flask's global config
-        print(config['dbname'])
-        print(config['user'])
-        print(config['password'])
-        print(config['host'])
-        print(config['port'])
         g.db = psycopg2.connect(
             dbname=config['dbname'],
             user=config['user'],

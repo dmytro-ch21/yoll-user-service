@@ -6,8 +6,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-print(os.getenv('DATABASE_PASSWORD'))
-
 def create_app():
     """Initialize Flask app"""
     app = Flask(__name__)
