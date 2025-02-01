@@ -1,14 +1,17 @@
 from app import create_app, get_db
 
 def create_tables():
-    """Create database tables using raw SQL."""
-    app = create_app()  # Initialize Flask app
-
-    with app.app_context():  # Ensure we're inside an app context
+    """Create database tables using raw SQL if they don't exist."""
+    app = create_app()
+    with app.app_context():
         db = get_db()
         cursor = db.cursor()
 
-        # Create Users Table
+        cursor.execute("SELECT EXISTS(SELECT * FROM information_schema.tables WHERE table_name='users');")
+        if cursor.fetchone()[0]:
+            print("✅ Tables already exist, skipping initialization.")
+            return
+
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS users (
                 id SERIAL PRIMARY KEY,
@@ -16,8 +19,6 @@ def create_tables():
                 email VARCHAR(100) UNIQUE NOT NULL
             );
         """)
-
-        # Create Movies Table
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS movies (
                 id SERIAL PRIMARY KEY,
@@ -27,8 +28,6 @@ def create_tables():
                 user_id INT REFERENCES users(id) ON DELETE CASCADE
             );
         """)
-
-        # Create Todos Table
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS todos (
                 id SERIAL PRIMARY KEY,
@@ -42,7 +41,7 @@ def create_tables():
         cursor.close()
         db.close()
 
-    print("✅ Database tables created successfully!")
+        print("✅ Database tables created successfully!")
 
 if __name__ == "__main__":
     create_tables()
