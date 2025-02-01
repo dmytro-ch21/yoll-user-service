@@ -1,0 +1,434 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Yoll API",
+    "description": "Yoll API provides real multi-domain services allowing students to integrate it in their projects.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:5001",
+      "description": "Local development server"
+    }
+  ],
+  "paths": {
+    "/api/users": {
+      "get": {
+        "summary": "Retrieve all users",
+        "description": "Returns a list of all users. **Requires header**: X-Secret-Token",
+        "tags": ["Users"],
+        "parameters": [
+          {
+            "name": "X-Secret-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Secret token required for authentication"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new user",
+        "description": "Creates a user with name and email.",
+        "tags": ["Users"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Alice"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "alice@example.com"
+                  }
+                },
+                "required": ["name", "email"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User created successfully"
+          },
+          "400": {
+            "description": "Invalid input data"
+          }
+        }
+      }
+    },
+    "/api/users/{user_id}": {
+      "parameters": [
+        {
+          "name": "user_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          },
+          "description": "ID of the user"
+        }
+      ],
+      "get": {
+        "summary": "Retrieve a user by ID",
+        "description": "Fetches a single user based on their ID.",
+        "tags": ["Users"],
+        "responses": {
+          "200": {
+            "description": "User retrieved successfully"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update user details",
+        "description": "Updates the name and email of a user.",
+        "tags": ["Users"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Updated Name"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "updated@example.com"
+                  }
+                },
+                "required": ["name", "email"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User updated successfully"
+          },
+          "400": {
+            "description": "Invalid input data"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a user",
+        "description": "Deletes a user by ID.",
+        "tags": ["Users"],
+        "responses": {
+          "200": {
+            "description": "User deleted successfully"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/api/movies": {
+      "get": {
+        "summary": "Retrieve all movies for a user",
+        "description": "Returns a list of movies for the specified user. (Requires query parameter user_id)",
+        "tags": ["Movies"],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID of the user"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with a list of movies"
+          },
+          "400": {
+            "description": "User ID is required as a query parameter"
+          },
+          "404": {
+            "description": "No movies found for this user"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new movie",
+        "description": "Creates a movie with title, genre, release_year, and user_id.",
+        "tags": ["Movies"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["title", "user_id"],
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "example": "Inception"
+                  },
+                  "genre": {
+                    "type": "string",
+                    "example": "Sci-Fi"
+                  },
+                  "release_year": {
+                    "type": "integer",
+                    "example": 2010
+                  },
+                  "user_id": {
+                    "type": "integer",
+                    "example": 1
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Movie created successfully"
+          },
+          "400": {
+            "description": "Invalid input data"
+          }
+        }
+      }
+    },
+    "/api/movies/{movie_id}": {
+      "parameters": [
+        {
+          "name": "movie_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          },
+          "description": "ID of the movie"
+        },
+        {
+          "name": "user_id",
+          "in": "query",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          },
+          "description": "ID of the user"
+        }
+      ],
+      "delete": {
+        "summary": "Delete a movie",
+        "description": "Deletes a movie by its ID for the specified user.",
+        "tags": ["Movies"],
+        "responses": {
+          "200": {
+            "description": "Movie deleted successfully"
+          },
+          "400": {
+            "description": "User ID is required to delete a movie"
+          },
+          "404": {
+            "description": "Movie not found or does not belong to this user"
+          }
+        }
+      }
+    },
+    "/api/todos": {
+      "get": {
+        "summary": "Retrieve all todos for a user",
+        "description": "Returns a list of all todos for the specified user.",
+        "tags": ["Todos"],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID of the user"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with a list of todos"
+          },
+          "400": {
+            "description": "User ID is required as a query parameter"
+          },
+          "404": {
+            "description": "No todos found for this user"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new todo",
+        "description": "Creates a todo with a task, completed status, and user_id for a specific user.",
+        "tags": ["Todos"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["task", "user_id"],
+                "properties": {
+                  "task": {
+                    "type": "string",
+                    "example": "Buy groceries"
+                  },
+                  "completed": {
+                    "type": "boolean",
+                    "example": false
+                  },
+                  "user_id": {
+                    "type": "integer",
+                    "example": 1
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Todo created successfully"
+          },
+          "400": {
+            "description": "Invalid input data"
+          }
+        }
+      }
+    },
+    "/api/todos/{todo_id}": {
+      "parameters": [
+        {
+          "name": "todo_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          },
+          "description": "ID of the todo"
+        },
+        {
+          "name": "user_id",
+          "in": "query",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          },
+          "description": "ID of the user"
+        }
+      ],
+      "get": {
+        "summary": "Retrieve a todo by ID",
+        "description": "Fetches a single todo for the specified user.",
+        "tags": ["Todos"],
+        "responses": {
+          "200": {
+            "description": "Todo retrieved successfully"
+          },
+          "400": {
+            "description": "User ID is required"
+          },
+          "404": {
+            "description": "Todo not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update todo details",
+        "description": "Updates the task and completed status of a todo for the specified user.",
+        "tags": ["Todos"],
+        "parameters": [
+          {
+            "name": "todo_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["task"],
+                "properties": {
+                  "task": {
+                    "type": "string",
+                    "example": "Update task"
+                  },
+                  "completed": {
+                    "type": "boolean",
+                    "example": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Todo updated successfully"
+          },
+          "400": {
+            "description": "Invalid input data"
+          },
+          "404": {
+            "description": "Todo not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a todo",
+        "description": "Deletes a todo for the specified user.",
+        "tags": ["Todos"],
+        "responses": {
+          "200": {
+            "description": "Todo deleted successfully"
+          },
+          "400": {
+            "description": "User ID is required"
+          },
+          "404": {
+            "description": "Todo not found or does not belong to this user"
+          }
+        }
+      }
+    }
+  }
+}
