@@ -1,10 +1,15 @@
 import os
 from flask import Blueprint, request, jsonify, current_app
-from app.db import get_db  # Import from app/db.py
+from app.db import get_db 
+from dotenv import load_dotenv
+from app.services.user_service import UserService
+
+
+user_bp = Blueprint("user", __name__)
+load_dotenv()
 
 routes_bp = Blueprint('routes', __name__)
-
-SECRET_TOKEN = "qwerty"  # Define the secret token
+SECRET_TOKEN = os.getenv("SECRET_TOKEN")
 
 def verify_token():
     """Check if the request contains a valid secret token."""
@@ -40,21 +45,15 @@ def create_user():
     finally:
         cursor.close()
         
-@routes_bp.route('/users', methods=['GET'])
+@user_bp.route('/users', methods=['GET'])
 def get_all_users():
     """Retrieve all users"""
     auth = verify_token()
     if auth:
         return auth  # Return 403 if unauthorized
     
-    db = get_db()
-    cursor = db.cursor()
-
-    cursor.execute("SELECT id, name, email FROM users")
-    users = cursor.fetchall()
-    cursor.close()
-
-    return jsonify([{"id": user[0], "name": user[1], "email": user[2]} for user in users]), 200
+    users = UserService.get_all_users()
+    return jsonify(users), 200
 
 @routes_bp.route('/users/<int:user_id>', methods=['GET'])
 def get_user(user_id):

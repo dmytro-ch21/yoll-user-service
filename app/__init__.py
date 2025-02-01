@@ -1,7 +1,7 @@
 import os
 from flask import Flask
-from app.routes import routes_bp
-from app.db import close_db  # Import close_db() only
+from app.controllers.user_controller import user_bp
+from app.db import close_db 
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -20,9 +20,8 @@ def create_app():
     }
 
     # Register Routes
-    app.register_blueprint(routes_bp, url_prefix='/api')
+    app.register_blueprint(user_bp, url_prefix='/api')
 
-    # Ensure database connections are closed after requests
     app.teardown_appcontext(close_db)
 
     return app
