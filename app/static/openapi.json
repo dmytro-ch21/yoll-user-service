@@ -7,8 +7,8 @@
   },
   "servers": [
     {
-      "url": "http://3.15.206.121:5000",
-      "description": "Local development server"
+      "url": "http://yollstudentapi.com",
+      "description": "Server"
     }
   ],
   "paths": {
@@ -135,9 +135,23 @@
         "summary": "Delete a user",
         "description": "Deletes a user by ID.",
         "tags": ["Users"],
+        "parameters": [
+          {
+            "name": "X-Delete-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Grands privileges for delete operation"
+          }
+        ],
         "responses": {
           "200": {
             "description": "User deleted successfully"
+          },
+          "403": {
+            "description": "Insufficient privileges for delete operation"
           },
           "404": {
             "description": "User not found"

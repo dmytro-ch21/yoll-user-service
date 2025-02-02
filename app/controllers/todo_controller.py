@@ -4,6 +4,7 @@ from app.services.todo_service import TodoService
 
 todo_bp = Blueprint("todo", __name__)
 
+
 @todo_bp.route("/todos", methods=["POST"])
 def create_todo():
     data = request.json
