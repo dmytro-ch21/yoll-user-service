@@ -15,7 +15,7 @@ def create_app():
     """Initialize Flask app"""
     app = Flask(__name__)
     
-    CORS(app, resources={r"/api/*": {"origins": "*", "allow_headers": ["Content-Type", "X-Secret-Token", "Authorization"]}})
+    CORS(app)
     
     # Set up logging
     configure_logging(app)
