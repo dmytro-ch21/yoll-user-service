@@ -1,4 +1,4 @@
-
+# Exit immediately if any command exits with a non-zero status.
 set -e
 
 # --- Configuration ---
@@ -32,8 +32,12 @@ echo "Stopping any running Gunicorn instance..."
 pkill -f "$PROCESS_IDENTIFIER" || echo "No running instance found."
 
 # Start the app in the background using Gunicorn with 2 workers.
-# Logs are sent to stdout using the "-" argument for access and error log files.
+# Logs are sent to stdout using "-" so they end up in nohup.out.
 echo "Starting the application using Gunicorn..."
 nohup gunicorn --workers 2 --bind 0.0.0.0:5000 run:app --access-logfile - --error-logfile - --log-level debug &
 
 echo "Deployment complete! Your app should now be running."
+
+# Optional: Tail the logs so you can see incoming requests and errors.
+echo "Tailing logs (press Ctrl+C to exit)..."
+tail -f nohup.out
