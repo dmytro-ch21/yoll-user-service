@@ -7,6 +7,7 @@ from app.db import close_db
 from dotenv import load_dotenv
 from flask_swagger_ui import get_swaggerui_blueprint
 from flask_cors import CORS
+from .logging_config import configure_logging
 
 load_dotenv()
 
@@ -15,6 +16,9 @@ def create_app():
     app = Flask(__name__)
     
     CORS(app, resources={r"/api/*": {"origins": "*", "allow_headers": ["Content-Type", "X-Secret-Token", "Authorization"]}})
+    
+    # Set up logging
+    configure_logging(app)
     
     # AWS RDS PostgreSQL Configuration
     app.config['DATABASE'] = {
