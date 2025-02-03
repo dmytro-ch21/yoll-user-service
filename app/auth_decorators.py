@@ -12,7 +12,6 @@ DELETE_SECRET_TOKEN = os.getenv("DELETE_SECRET_TOKEN")
 def require_token(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        # Allow OPTIONS requests to pass through
         if request.method == "OPTIONS":
             return func(*args, **kwargs)
         token = request.headers.get("X-Secret-Token")
