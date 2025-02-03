@@ -11,7 +11,6 @@ def test_default_route(client):
 
 
 def test_add_movie_success(client, monkeypatch):
-    # Simulate a successful repository call for adding a movie.
     from app.repositories.movie_repository import MovieRepository
 
     def fake_add_movie(data):
