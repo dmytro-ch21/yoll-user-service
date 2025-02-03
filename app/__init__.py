@@ -12,17 +12,14 @@ from app.controllers.default_controller import default_bp
 
 load_dotenv()
 
-
 def create_app():
     """Initialize Flask app"""
     app = Flask(__name__)
 
     CORS(app)
 
-    # Set up logging
     configure_logging(app)
 
-    # AWS RDS PostgreSQL Configuration
     app.config["DATABASE"] = {
         "dbname": os.getenv("DATABASE_NAME"),
         "user": os.getenv("DATABASE_USER"),
@@ -31,16 +28,14 @@ def create_app():
         "port": os.getenv("DATABASE_PORT"),
     }
 
-    # Register Routes
     app.register_blueprint(default_bp)
     app.register_blueprint(user_bp, url_prefix="/api")
     app.register_blueprint(movie_bp, url_prefix="/api")
     app.register_blueprint(todo_bp, url_prefix="/api")
 
-    # Register Swagger UI
-    SWAGGER_URL = "/api/docs"  # URL where Swagger UI will be accessible
+    SWAGGER_URL = "/api/docs"  
     API_URL = (
-        "/static/openapi.json"  # URL for your OpenAPI JSON file (make sure it exists!)
+        "/static/openapi.json"  
     )
     swaggerui_blueprint = get_swaggerui_blueprint(
         SWAGGER_URL, API_URL, config={"app_name": "Yoll User Service API"}
