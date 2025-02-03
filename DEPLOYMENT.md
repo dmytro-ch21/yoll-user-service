@@ -1,8 +1,3 @@
----
-
-**DEPLOYMENT.md (Production Deployment on AWS Linux)**
-
-```markdown
 # Deployment Guide for Yoll User Service
 
 This guide outlines the steps to deploy the **Yoll User Service** on an AWS Linux instance. The deployment uses a virtual environment, Gunicorn as the WSGI server, and no reverse proxy (like Nginx) is required.
