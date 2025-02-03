@@ -1,4 +1,3 @@
-# app/services/todo_service.py
 from app.repositories.todo_repository import TodoRepository
 
 class TodoService:
