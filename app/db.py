@@ -1,11 +1,11 @@
 import psycopg2
-from flask import g, current_app  # Use current_app instead of create_app
+from flask import g, current_app
 
 
 def get_db():
     """Establish a database connection if one does not exist"""
     if "db" not in g:
-        config = current_app.config["DATABASE"]  # Use Flask's global config
+        config = current_app.config["DATABASE"]
         g.db = psycopg2.connect(
             dbname=config["dbname"],
             user=config["user"],
