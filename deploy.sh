@@ -2,14 +2,13 @@
 set -e
 
 # --- Configuration ---
-# Configure Git to ignore file mode changes.
+# Git to ignore file mode changes.
 git config core.fileMode false
 
-# Set the project directory to your app's location on the instance.
+# Set the project directory to app's location on the instance.
 PROJECT_DIR="/home/ec2-user/yoll-user-service"
 
-# The command or identifier used to locate your running process.
-# We'll use "gunicorn" to target the Gunicorn process.
+# The command to locate gunicorn running process.
 PROCESS_IDENTIFIER="gunicorn"
 
 # --- Deployment Script ---
@@ -38,13 +37,11 @@ pytest --maxfail=1 --disable-warnings -q
 echo "Stopping any running Gunicorn instance..."
 pkill -f "$PROCESS_IDENTIFIER" || echo "No running instance found."
 
-# Start the app in the background using Gunicorn with 2 workers.
-# Logs are sent to stdout using "-" so they end up in nohup.out.
 echo "Starting the application using Gunicorn..."
 nohup gunicorn --workers 2 --bind 0.0.0.0:5000 run:app --access-logfile - --error-logfile - --log-level debug &
 
 echo "Deployment complete! Your app should now be running."
 
-# Optional: Tail the logs so you can see incoming requests and errors.
+# See the logs
 echo "Tailing logs (press Ctrl+C to exit)..."
 tail -f nohup.out
