@@ -1,4 +1,3 @@
-# tests/test_api.py
 import json
 import pytest
 
@@ -9,7 +8,7 @@ def test_default_route(client):
     assert "message" in data
     assert "openapi_docs" in data
 
-
+# --- MOVIES ENDPOINTS ---
 def test_add_movie_success(client, monkeypatch):
     from app.repositories.movie_repository import MovieRepository
 
