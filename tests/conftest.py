@@ -13,7 +13,6 @@ from app.controllers.user_controller import user_bp
 @pytest.fixture
 def client():
     app = Flask(__name__)
-    # Register your blueprints
     app.register_blueprint(default_bp)
     app.register_blueprint(movie_bp)
     app.register_blueprint(todo_bp)
