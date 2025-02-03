@@ -16,7 +16,8 @@ def create_tables():
             CREATE TABLE IF NOT EXISTS users (
                 id SERIAL PRIMARY KEY,
                 name VARCHAR(100) NOT NULL,
-                email VARCHAR(100) UNIQUE NOT NULL
+                email VARCHAR(100) UNIQUE NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
         """)
         cursor.execute("""
@@ -25,15 +26,17 @@ def create_tables():
                 title VARCHAR(255) NOT NULL,
                 genre VARCHAR(100),
                 release_year INT,
-                user_id INT REFERENCES users(id) ON DELETE CASCADE
+                user_id INT REFERENCES users(id) ON DELETE CASCADE,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
         """)
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS todos (
                 id SERIAL PRIMARY KEY,
-                task TEXT NOT NULL,
+                title TEXT NOT NULL,
                 completed BOOLEAN DEFAULT FALSE,
-                user_id INT REFERENCES users(id) ON DELETE CASCADE
+                user_id INT REFERENCES users(id) ON DELETE CASCADE,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
         """)
 

@@ -1,6 +1,6 @@
-# app/controllers/todo_controller.py
 from flask import Blueprint, request, jsonify
 from app.services.todo_service import TodoService
+import json
 
 todo_bp = Blueprint("todo", __name__)
 

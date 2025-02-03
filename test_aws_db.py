@@ -1,4 +1,5 @@
-from app import get_db, create_app
+from app.db import get_db
+from app import create_app
 
 def test_connection():
     """Test AWS RDS database connection"""

@@ -30,7 +30,48 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful response"
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer",
+                        "example": 1
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "Alice"
+                      },
+                      "email": {
+                        "type": "string",
+                        "example": "alice@example.com"
+                      }
+                    },
+                    "required": ["id", "name", "email"]
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Unauthorized"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       },
@@ -44,6 +85,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
+                "required": ["name", "email"],
                 "properties": {
                   "name": {
                     "type": "string",
@@ -53,18 +95,52 @@
                     "type": "string",
                     "example": "alice@example.com"
                   }
-                },
-                "required": ["name", "email"]
+                }
               }
             }
           }
         },
         "responses": {
           "201": {
-            "description": "User created successfully"
+            "description": "User created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Alice"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "alice@example.com"
+                    }
+                  },
+                  "required": ["id", "name", "email"]
+                }
+              }
+            }
           },
           "400": {
-            "description": "Invalid input data"
+            "description": "Invalid input data (e.g., invalid email format)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Invalid email format"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -87,10 +163,45 @@
         "tags": ["Users"],
         "responses": {
           "200": {
-            "description": "User retrieved successfully"
+            "description": "User retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Alice"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "alice@example.com"
+                    }
+                  },
+                  "required": ["id", "name", "email"]
+                }
+              }
+            }
           },
           "404": {
-            "description": "User not found"
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "User not found"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       },
@@ -104,6 +215,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
+                "required": ["name", "email"],
                 "properties": {
                   "name": {
                     "type": "string",
@@ -113,21 +225,60 @@
                     "type": "string",
                     "example": "updated@example.com"
                   }
-                },
-                "required": ["name", "email"]
+                }
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "User updated successfully"
+            "description": "User updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User updated successfully"
+                    }
+                  },
+                  "required": ["message"]
+                }
+              }
+            }
           },
           "400": {
-            "description": "Invalid input data"
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Name and email are required"
+                    }
+                  }
+                }
+              }
+            }
           },
           "404": {
-            "description": "User not found"
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "User not found"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       },
@@ -143,18 +294,58 @@
             "schema": {
               "type": "string"
             },
-            "description": "Grands privileges for delete operation"
+            "description": "Grants privileges for delete operation"
           }
         ],
         "responses": {
           "200": {
-            "description": "User deleted successfully"
+            "description": "User deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User deleted successfully"
+                    }
+                  },
+                  "required": ["message"]
+                }
+              }
+            }
           },
           "403": {
-            "description": "Insufficient privileges for delete operation"
+            "description": "Insufficient privileges for delete operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Insufficient privileges for delete operation"
+                    }
+                  }
+                }
+              }
+            }
           },
           "404": {
-            "description": "User not found"
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "User not found"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -177,13 +368,68 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful response with a list of movies"
+            "description": "Successful response with a list of movies",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer",
+                        "example": 1
+                      },
+                      "title": {
+                        "type": "string",
+                        "example": "Inception"
+                      },
+                      "genre": {
+                        "type": "string",
+                        "example": "Sci-Fi"
+                      },
+                      "release_year": {
+                        "type": "integer",
+                        "example": 2010
+                      }
+                    },
+                    "required": ["id", "title", "genre", "release_year"]
+                  }
+                }
+              }
+            }
           },
           "400": {
-            "description": "User ID is required as a query parameter"
+            "description": "User ID is required as a query parameter",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "User ID is required as a query parameter"
+                    }
+                  }
+                }
+              }
+            }
           },
           "404": {
-            "description": "No movies found for this user"
+            "description": "No movies found for this user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "No movies found for this user"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       },
@@ -222,10 +468,59 @@
         },
         "responses": {
           "201": {
-            "description": "Movie created successfully"
+            "description": "Movie created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "title": {
+                      "type": "string",
+                      "example": "Inception"
+                    },
+                    "genre": {
+                      "type": "string",
+                      "example": "Sci-Fi"
+                    },
+                    "release_year": {
+                      "type": "integer",
+                      "example": 2010
+                    },
+                    "user_id": {
+                      "type": "integer",
+                      "example": 1
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "title",
+                    "genre",
+                    "release_year",
+                    "user_id"
+                  ]
+                }
+              }
+            }
           },
           "400": {
-            "description": "Invalid input data"
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Title and user_id are required"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -257,13 +552,53 @@
         "tags": ["Movies"],
         "responses": {
           "200": {
-            "description": "Movie deleted successfully"
+            "description": "Movie deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Movie deleted successfully"
+                    }
+                  },
+                  "required": ["message"]
+                }
+              }
+            }
           },
           "400": {
-            "description": "User ID is required to delete a movie"
+            "description": "User ID is required to delete a movie",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "User ID is required as a query parameter"
+                    }
+                  }
+                }
+              }
+            }
           },
           "404": {
-            "description": "Movie not found or does not belong to this user"
+            "description": "Movie not found or does not belong to this user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Movie not found or does not belong to this user"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -286,19 +621,85 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful response with a list of todos"
+            "description": "List of todos retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer",
+                        "example": 1
+                      },
+                      "title": {
+                        "type": "string",
+                        "example": "Buy groceries"
+                      },
+                      "completed": {
+                        "type": "boolean",
+                        "example": false
+                      },
+                      "user_id": {
+                        "type": "integer",
+                        "example": 1
+                      },
+                      "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-02-02T19:42:53Z"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "title",
+                      "completed",
+                      "user_id",
+                      "created_at"
+                    ]
+                  }
+                }
+              }
+            }
           },
           "400": {
-            "description": "User ID is required as a query parameter"
+            "description": "Bad Request: user_id query parameter is required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "user_id is required as a query parameter: /todos?user_id=<user_id>"
+                    }
+                  }
+                }
+              }
+            }
           },
           "404": {
-            "description": "No todos found for this user"
+            "description": "No todos found for the given user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "No todos found for this user_id=1"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       },
       "post": {
         "summary": "Create a new todo",
-        "description": "Creates a todo with a task, completed status, and user_id for a specific user.",
+        "description": "Creates a new todo with a title, completed status, and user_id for a specific user.",
         "tags": ["Todos"],
         "requestBody": {
           "required": true,
@@ -306,9 +707,9 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["task", "user_id"],
+                "required": ["title", "user_id"],
                 "properties": {
-                  "task": {
+                  "title": {
                     "type": "string",
                     "example": "Buy groceries"
                   },
@@ -327,10 +728,60 @@
         },
         "responses": {
           "201": {
-            "description": "Todo created successfully"
+            "description": "Todo created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "title": {
+                      "type": "string",
+                      "example": "Buy groceries"
+                    },
+                    "completed": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "user_id": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2025-02-02T19:42:53Z"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "title",
+                    "completed",
+                    "user_id",
+                    "created_at"
+                  ]
+                }
+              }
+            }
           },
           "400": {
-            "description": "Invalid input data"
+            "description": "Bad Request: Missing required fields or an internal error occurred",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Fields title and user_id are required"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -357,54 +808,99 @@
         }
       ],
       "get": {
-        "summary": "Retrieve a todo by ID",
+        "summary": "Retrieve a specific todo",
         "description": "Fetches a single todo for the specified user.",
         "tags": ["Todos"],
         "responses": {
           "200": {
-            "description": "Todo retrieved successfully"
+            "description": "Todo retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "title": {
+                      "type": "string",
+                      "example": "Buy groceries"
+                    },
+                    "completed": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "user_id": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2025-02-02T19:42:53Z"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "title",
+                    "completed",
+                    "user_id",
+                    "created_at"
+                  ]
+                }
+              }
+            }
           },
           "400": {
-            "description": "User ID is required"
+            "description": "Bad Request: Missing required parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "user_id and todo_id are required"
+                    }
+                  }
+                }
+              }
+            }
           },
           "404": {
-            "description": "Todo not found"
+            "description": "Todo not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Todo with id=1 not found"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       },
       "put": {
-        "summary": "Update todo details",
-        "description": "Updates the task and completed status of a todo for the specified user.",
+        "summary": "Update a todo",
+        "description": "Updates the title and/or completed status of a todo for the specified user.",
         "tags": ["Todos"],
-        "parameters": [
-          {
-            "name": "todo_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "user_id",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["task"],
+                "required": ["title"],
                 "properties": {
-                  "task": {
+                  "title": {
                     "type": "string",
-                    "example": "Update task"
+                    "example": "Updated title"
                   },
                   "completed": {
                     "type": "boolean",
@@ -417,13 +913,86 @@
         },
         "responses": {
           "200": {
-            "description": "Todo updated successfully"
+            "description": "Todo updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Todo updated successfully"
+                    },
+                    "task": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "title": {
+                          "type": "string",
+                          "example": "Updated title"
+                        },
+                        "completed": {
+                          "type": "boolean",
+                          "example": true
+                        },
+                        "user_id": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "created_at": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2025-02-02T19:42:53Z"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "title",
+                        "completed",
+                        "user_id",
+                        "created_at"
+                      ]
+                    }
+                  },
+                  "required": ["message", "task"]
+                }
+              }
+            }
           },
           "400": {
-            "description": "Invalid input data"
+            "description": "Bad Request: Missing required fields",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Field title is required"
+                    }
+                  }
+                }
+              }
+            }
           },
           "404": {
-            "description": "Todo not found"
+            "description": "Todo not found or update failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Todo with id=1 not found or update failed"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       },
@@ -433,13 +1002,37 @@
         "tags": ["Todos"],
         "responses": {
           "200": {
-            "description": "Todo deleted successfully"
-          },
-          "400": {
-            "description": "User ID is required"
+            "description": "Todo deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Todo with id=1 deleted successfully"
+                    }
+                  },
+                  "required": ["message"]
+                }
+              }
+            }
           },
           "404": {
-            "description": "Todo not found or does not belong to this user"
+            "description": "Todo not found or does not belong to this user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Todo with id=1 not found or does not belong to this user"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }

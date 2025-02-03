@@ -27,6 +27,10 @@ source venv/bin/activate
 echo "Installing dependencies..."
 pip install -r requirements.txt
 
+# Run tests before deploying.
+echo "Running tests..."
+pytest --maxfail=1 --disable-warnings -q
+
 # Stop any existing instance of the app (Gunicorn)
 echo "Stopping any running Gunicorn instance..."
 pkill -f "$PROCESS_IDENTIFIER" || echo "No running instance found."

@@ -1,5 +1,6 @@
 from app.db import get_db
 
+
 class TodoRepository:
     @staticmethod
     def create_todo(data):
@@ -7,16 +8,19 @@ class TodoRepository:
         cursor = db.cursor()
         try:
             cursor.execute(
-                "INSERT INTO todos (task, completed, user_id) VALUES (%s, %s, %s) RETURNING id",
-                (data["task"], data.get("completed", False), data["user_id"])
+                "INSERT INTO todos (title, completed, user_id) VALUES (%s, %s, %s) RETURNING id, created_at",
+                (data["title"], data.get("completed", False), data["user_id"]),
             )
-            todo_id = cursor.fetchone()[0]
+            todo = cursor.fetchone()
+            todo_id = todo[0]
+            created_at = todo[1]
             db.commit()
             return {
                 "id": todo_id,
-                "task": data["task"],
+                "title": data["title"],
                 "completed": data.get("completed", False),
-                "user_id": data["user_id"]
+                "user_id": data["user_id"],
+                "created_at": created_at,
             }
         except Exception as e:
             db.rollback()
@@ -30,12 +34,12 @@ class TodoRepository:
         cursor = db.cursor()
         try:
             cursor.execute(
-                "SELECT id, task, completed FROM todos WHERE user_id = %s",
-                (user_id,)
+                "SELECT id, title, completed, created_at FROM todos WHERE user_id = %s",
+                (user_id,),
             )
             todos = cursor.fetchall()
             return [
-                {"id": t[0], "task": t[1], "completed": t[2]}
+                {"id": t[0], "title": t[1], "completed": t[2], "created_at": t[3]}
                 for t in todos
             ]
         finally:
@@ -47,12 +51,17 @@ class TodoRepository:
         cursor = db.cursor()
         try:
             cursor.execute(
-                "SELECT id, task, completed FROM todos WHERE id = %s AND user_id = %s",
-                (todo_id, user_id)
+                "SELECT id, title, completed, created_at FROM todos WHERE id = %s AND user_id = %s",
+                (todo_id, user_id),
             )
             todo = cursor.fetchone()
             if todo:
-                return {"id": todo[0], "task": todo[1], "completed": todo[2]}
+                return {
+                    "id": todo[0],
+                    "title": todo[1],
+                    "completed": todo[2],
+                    "created_at": todo[3],
+                }
             else:
                 return None
         finally:
@@ -64,12 +73,24 @@ class TodoRepository:
         cursor = db.cursor()
         try:
             cursor.execute(
-                "UPDATE todos SET task = %s, completed = %s WHERE id = %s AND user_id = %s RETURNING id",
-                (data["task"], data.get("completed", False), todo_id, user_id)
+                """
+                UPDATE todos 
+                SET title = %s, completed = %s 
+                WHERE id = %s AND user_id = %s 
+                RETURNING id, title, completed, created_at
+                """,
+                (data["title"], data.get("completed", False), todo_id, user_id),
             )
             updated = cursor.fetchone()
             db.commit()
-            return updated[0] if updated else None
+            if updated:
+                return {
+                    "id": updated[0],
+                    "title": updated[1],
+                    "completed": updated[2],
+                    "created_at": updated[3],
+                }
+            return None
         except Exception as e:
             db.rollback()
             raise e
@@ -83,7 +104,7 @@ class TodoRepository:
         try:
             cursor.execute(
                 "DELETE FROM todos WHERE id = %s AND user_id = %s RETURNING id",
-                (todo_id, user_id)
+                (todo_id, user_id),
             )
             deleted = cursor.fetchone()
             db.commit()
