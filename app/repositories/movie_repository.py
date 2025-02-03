@@ -47,7 +47,6 @@ class MovieRepository:
         db = get_db()
         cursor = db.cursor()
         try:
-            # First, verify the movie exists for the given user
             cursor.execute(
                 "SELECT id FROM movies WHERE id = %s AND user_id = %s", (movie_id, user_id)
             )
