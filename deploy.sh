@@ -2,6 +2,9 @@
 set -e
 
 # --- Configuration ---
+# Configure Git to ignore file mode changes.
+git config core.fileMode false
+
 # Set the project directory to your app's location on the instance.
 PROJECT_DIR="/home/ec2-user/yoll-user-service"
 
