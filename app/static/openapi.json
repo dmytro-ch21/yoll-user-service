@@ -1036,6 +1036,623 @@
           }
         }
       }
+    },
+    "/api/user/contacts": {
+      "post": {
+        "summary": "Create a new contact for a user",
+        "description": "Creates a new contact. The request body must include the user_id and full_name along with any other contact details.",
+        "tags": ["Contacts"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["user_id", "full_name"],
+                "properties": {
+                  "user_id": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "full_name": {
+                    "type": "string",
+                    "example": "John Doe"
+                  },
+                  "phone_number": {
+                    "type": "string",
+                    "example": "123-456-7890"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "john.doe@example.com"
+                  },
+                  "street": {
+                    "type": "string",
+                    "example": "123 Main St"
+                  },
+                  "city": {
+                    "type": "string",
+                    "example": "Anytown"
+                  },
+                  "state": {
+                    "type": "string",
+                    "example": "CA"
+                  },
+                  "postal_code": {
+                    "type": "string",
+                    "example": "90210"
+                  },
+                  "country": {
+                    "type": "string",
+                    "example": "USA"
+                  },
+                  "additional_info": {
+                    "type": "string",
+                    "example": "VIP client"
+                  },
+                  "base64_image": {
+                    "type": "string",
+                    "example": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Contact created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "integer", "example": 1 },
+                    "user_id": { "type": "integer", "example": 1 },
+                    "full_name": { "type": "string", "example": "John Doe" },
+                    "created_at": { "type": "integer", "example": 1640995200 }
+                  },
+                  "required": ["id", "user_id", "full_name", "created_at"]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data (e.g., missing user_id or full_name)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "user_id and full_name are required"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Retrieve all contacts for a user",
+        "description": "Returns a list of contacts for the specified user. The user_id must be provided as a query parameter.",
+        "tags": ["Contacts"],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "integer" },
+            "description": "ID of the user whose contacts are to be retrieved"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Contacts retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "integer", "example": 1 },
+                      "user_id": { "type": "integer", "example": 1 },
+                      "full_name": { "type": "string", "example": "John Doe" },
+                      "phone_number": {
+                        "type": "string",
+                        "example": "123-456-7890"
+                      },
+                      "email": {
+                        "type": "string",
+                        "example": "john.doe@example.com"
+                      },
+                      "city": { "type": "string", "example": "Anytown" },
+                      "country": { "type": "string", "example": "USA" },
+                      "base64_image": {
+                        "type": "string",
+                        "example": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."
+                      },
+                      "is_favorite": { "type": "boolean", "example": true }
+                    },
+                    "required": ["id", "user_id", "full_name"]
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "user_id query parameter is required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "user_id is required as a query parameter"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/user/contacts/{contact_id}": {
+      "parameters": [
+        {
+          "name": "contact_id",
+          "in": "path",
+          "required": true,
+          "schema": { "type": "integer" },
+          "description": "ID of the contact"
+        },
+        {
+          "name": "user_id",
+          "in": "query",
+          "required": true,
+          "schema": { "type": "integer" },
+          "description": "ID of the user"
+        }
+      ],
+      "get": {
+        "summary": "Retrieve a specific contact",
+        "description": "Fetches detailed information for a specific contact that belongs to the given user.",
+        "tags": ["Contacts"],
+        "responses": {
+          "200": {
+            "description": "Contact retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "integer", "example": 1 },
+                    "user_id": { "type": "integer", "example": 1 },
+                    "full_name": { "type": "string", "example": "John Doe" },
+                    "phone_number": {
+                      "type": "string",
+                      "example": "123-456-7890"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "john.doe@example.com"
+                    },
+                    "street": { "type": "string", "example": "123 Main St" },
+                    "city": { "type": "string", "example": "Anytown" },
+                    "state": { "type": "string", "example": "CA" },
+                    "postal_code": { "type": "string", "example": "90210" },
+                    "country": { "type": "string", "example": "USA" },
+                    "additional_info": {
+                      "type": "string",
+                      "example": "VIP client"
+                    },
+                    "base64_image": {
+                      "type": "string",
+                      "example": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."
+                    },
+                    "created_at": { "type": "integer", "example": 1640995200 },
+                    "is_favorite": { "type": "boolean", "example": true }
+                  },
+                  "required": ["id", "user_id", "full_name"]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "user_id query parameter is required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "user_id is required as a query parameter"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Contact not found or does not belong to this user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Contact not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a contact",
+        "description": "Updates the details of a contact. The request body must include user_id (to verify ownership) along with any updated fields.",
+        "tags": ["Contacts"],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "integer" },
+            "description": "ID of the user"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["user_id"],
+                "properties": {
+                  "user_id": { "type": "integer", "example": 1 },
+                  "full_name": {
+                    "type": "string",
+                    "example": "John Doe Updated"
+                  },
+                  "phone_number": {
+                    "type": "string",
+                    "example": "987-654-3210"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "john.updated@example.com"
+                  },
+                  "street": { "type": "string", "example": "456 Elm St" },
+                  "city": { "type": "string", "example": "Othertown" },
+                  "state": { "type": "string", "example": "NY" },
+                  "postal_code": { "type": "string", "example": "12345" },
+                  "country": { "type": "string", "example": "USA" },
+                  "additional_info": {
+                    "type": "string",
+                    "example": "Updated info"
+                  },
+                  "base64_image": {
+                    "type": "string",
+                    "example": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Contact updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Contact updated successfully"
+                    }
+                  },
+                  "required": ["message"]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data or missing user_id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "user_id is required as a query parameter"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Contact not found or does not belong to the user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Contact not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a contact",
+        "description": "Deletes a contact. The user_id must be provided as a query parameter to ensure the contact belongs to the user.",
+        "tags": ["Contacts"],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "integer" },
+            "description": "ID of the user"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Contact deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Contact deleted successfully"
+                    }
+                  },
+                  "required": ["message"]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Contact not found or does not belong to the user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Contact not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/user/contacts/favorites": {
+      "post": {
+        "summary": "Mark a contact as favorite",
+        "description": "Marks a contact as favorite by updating its is_favorite flag and adding a record to the favorites table. The user_id must be provided as a query parameter, and the request body must include the contact_id.",
+        "tags": ["Contacts Favorites"],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "integer" },
+            "description": "ID of the user"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["contact_id"],
+                "properties": {
+                  "contact_id": { "type": "integer", "example": 2 }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Contact marked as favorite successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Contact added to favorites"
+                    },
+                    "contact_id": { "type": "integer", "example": 2 }
+                  },
+                  "required": ["message"]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data or missing user_id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "user_id is required as a query parameter"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Contact not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Contact not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Retrieve favorite contacts for a user",
+        "description": "Returns a list of favorite contacts for the specified user. The user_id must be provided as a query parameter.",
+        "tags": ["Contacts Favorites"],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "integer" },
+            "description": "ID of the user"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Favorite contacts retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "integer", "example": 2 },
+                      "full_name": { "type": "string", "example": "John Doe" },
+                      "email": {
+                        "type": "string",
+                        "example": "john.doe@example.com"
+                      },
+                      "phone_number": {
+                        "type": "string",
+                        "example": "123-456-7890"
+                      },
+                      "created_at": {
+                        "type": "integer",
+                        "example": 1640995200
+                      },
+                      "is_favorite": { "type": "boolean", "example": true }
+                    },
+                    "required": ["id", "full_name", "created_at"]
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No favorites found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "No favorites found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/user/contacts/favorites/{contact_id}": {
+      "parameters": [
+        {
+          "name": "contact_id",
+          "in": "path",
+          "required": true,
+          "schema": { "type": "integer" },
+          "description": "ID of the contact to remove from favorites"
+        },
+        {
+          "name": "user_id",
+          "in": "query",
+          "required": true,
+          "schema": { "type": "integer" },
+          "description": "ID of the user"
+        }
+      ],
+      "delete": {
+        "summary": "Remove a contact from favorites",
+        "description": "Removes the favorite status from a contact by updating its is_favorite flag to false and deleting the record from the favorites table.",
+        "tags": ["Contacts Favorites"],
+        "responses": {
+          "200": {
+            "description": "Contact removed from favorites successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Contact removed from favorites"
+                    }
+                  },
+                  "required": ["message"]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Favorite contact not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Favorite contact not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

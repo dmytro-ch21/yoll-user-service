@@ -9,7 +9,7 @@ class ContactRepository:
             cursor.execute(
                 """
                 INSERT INTO contacts (user_id, full_name, phone_number, email, street, city, state, postal_code, country, additional_info, base64_image)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id;
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id, user_id, full_name, created_at;
                 """,
                 (
                     data.get("user_id"),
@@ -25,9 +25,9 @@ class ContactRepository:
                     data.get("base64_image"),
                 ),
             )
-            contact_id = cursor.fetchone()[0]
+            created_contact = cursor.fetchone()
             db.commit()
-            return {"id": contact_id}
+            return {"id": created_contact[0], "user_id": created_contact[1], "full_name": created_contact[2], "created_at": created_contact[3]}
         except Exception as e:
             db.rollback()
             raise e
@@ -166,5 +166,69 @@ class ContactRepository:
         except Exception as e:
             db.rollback()
             raise e
+        finally:
+            cursor.close()
+
+    @staticmethod
+    def get_all_contacts_by_user(user_id):
+        db = get_db()
+        cursor = db.cursor()
+        try:
+            cursor.execute(
+                """
+                SELECT id, user_id, full_name, phone_number, email, city, country, base64_image, is_favorite
+                FROM contacts WHERE user_id = %s;
+                """,
+                (user_id,),
+            )
+            rows = cursor.fetchall()
+            return [
+                {
+                    "id": row[0],
+                    "user_id": row[1],
+                    "full_name": row[2],
+                    "phone_number": row[3],
+                    "email": row[4],
+                    "city": row[5],
+                    "country": row[6],
+                    "base64_image": row[7],
+                    "is_favorite": row[8],
+                }
+                for row in rows
+            ]
+        finally:
+            cursor.close()
+
+    @staticmethod
+    def get_contact_by_id_and_user(contact_id, user_id):
+        db = get_db()
+        cursor = db.cursor()
+        try:
+            cursor.execute(
+                """
+                SELECT id, user_id, full_name, phone_number, email, street, city, state, postal_code, country, additional_info, base64_image, created_at, is_favorite
+                FROM contacts WHERE id = %s AND user_id = %s;
+                """,
+                (contact_id, user_id),
+            )
+            row = cursor.fetchone()
+            if row:
+                return {
+                    "id": row[0],
+                    "user_id": row[1],
+                    "full_name": row[2],
+                    "phone_number": row[3],
+                    "email": row[4],
+                    "street": row[5],
+                    "city": row[6],
+                    "state": row[7],
+                    "postal_code": row[8],
+                    "country": row[9],
+                    "additional_info": row[10],
+                    "base64_image": row[11],
+                    "created_at": row[12],
+                    "is_favorite": row[13],
+                }
+            return None
         finally:
             cursor.close()
