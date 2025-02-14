@@ -350,6 +350,79 @@
         }
       }
     },
+    "/api/users/email/{email}": {
+      "parameters": [
+        {
+          "name": "email",
+          "in": "path",
+          "description": "Email address of the user",
+          "required": true,
+          "schema": { "type": "string" }
+        },
+        {
+          "name": "X-Secret-Token",
+          "in": "header",
+          "description": "Secret token required for authentication",
+          "required": true,
+          "schema": { "type": "string" }
+        }
+      ],
+      "get": {
+        "summary": "Retrieve a user by email",
+        "description": "Fetches a single user based on their email address. Requires X-Secret-Token header for authorization.",
+        "tags": ["Users"],
+        "responses": {
+          "200": {
+            "description": "User retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "integer", "example": 1 },
+                    "name": { "type": "string", "example": "Alice" },
+                    "email": {
+                      "type": "string",
+                      "example": "alice@example.com"
+                    }
+                  },
+                  "required": ["id", "name", "email"]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": { "type": "string", "example": "Unauthorized" }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No user found with that email",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "No user found with that email"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/movies": {
       "get": {
         "summary": "Retrieve all movies for a user",

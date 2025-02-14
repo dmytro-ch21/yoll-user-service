@@ -50,4 +50,14 @@ class UserRepository:
         deleted = cursor.fetchone()
         db.commit()
         cursor.close()
-        return deleted    
+        return deleted
+    
+    @staticmethod
+    def get_user_by_email(email):
+        db = get_db()
+        cursor = db.cursor()
+        cursor.execute(
+        "SELECT id, name, email FROM users WHERE LOWER(email) = LOWER(%s);",(email,),)
+        user = cursor.fetchone()
+        cursor.close()
+        return {"id": user[0], "name": user[1], "email": user[2]} if user else None

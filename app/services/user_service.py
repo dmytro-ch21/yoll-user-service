@@ -39,3 +39,10 @@ class UserService:
         if not deleted:
             return {"error": "User not found"}, 404
         return {"message": "User deleted successfully"}
+    
+    @staticmethod
+    def get_user_by_email(email):
+        user = UserRepository.get_user_by_email(email)
+        if not user:
+            return {"error": f"No user found with given email {email}"}, 404
+        return user

@@ -54,3 +54,13 @@ def delete_user(user_id):
         return jsonify(response[0]), response[1]
 
     return jsonify(response), 200
+
+@user_bp.route("/users/email/<string:email>", methods=["GET"])
+@require_token
+def get_user_by_email(email):
+    response = UserService.get_user_by_email(email)
+
+    if isinstance(response, tuple):
+        return jsonify(response[0]), response[1]
+
+    return jsonify(response), 200    
