@@ -35,12 +35,28 @@ class ContactService:
 
     @staticmethod
     def update_contact(contact_id, data, user_id):
-        contact = ContactRepository.get_contact_by_id_and_user(contact_id, user_id)
-        if not contact:
+        existing = ContactRepository.get_contact_by_id_and_user(contact_id, user_id)
+        if not existing:
             return {"error": "Contact not found or does not belong to this user"}, 404
-        updated = ContactRepository.update_contact(contact_id, data)
-        if not updated:
-            return {"error": "Contact update failed"}, 404
+
+        merged_data = {
+            "full_name": data.get("full_name", existing["full_name"]),
+            "phone_number": data.get("phone_number", existing["phone_number"]),
+            "email": data.get("email", existing["email"]),
+            "street": data.get("street", existing["street"]),
+            "city": data.get("city", existing["city"]),
+            "state": data.get("state", existing["state"]),
+            "postal_code": data.get("postal_code", existing["postal_code"]),
+            "country": data.get("country", existing["country"]),
+            "additional_info": data.get("additional_info", existing["additional_info"]),
+            "base64_image": data.get("base64_image", existing["base64_image"]),
+            "is_favorite": data.get("is_favorite", existing["is_favorite"]),
+        }
+
+        updated_id = ContactRepository.update_contact(contact_id, merged_data)
+        if not updated_id:
+            return {"error": "Contact update failed"}, 400
+
         return {"message": "Contact updated successfully"}
 
     @staticmethod

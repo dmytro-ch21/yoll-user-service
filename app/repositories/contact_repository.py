@@ -108,7 +108,17 @@ class ContactRepository:
             cursor.execute(
                 """
                 UPDATE contacts
-                SET full_name = %s, phone_number = %s, email = %s, street = %s, city = %s, state = %s, postal_code = %s, country = %s, additional_info = %s, base64_image = %s
+                SET full_name = %s, 
+                phone_number = %s, 
+                email = %s, 
+                street = %s,
+                city = %s,
+                state = %s,
+                postal_code = %s,
+                country = %s,
+                additional_info = %s,
+                base64_image = %s,
+                is_favorite = %s
                 WHERE id = %s RETURNING id;
                 """,
                 (
@@ -122,6 +132,7 @@ class ContactRepository:
                     data.get("country"),
                     data.get("additional_info"),
                     data.get("base64_image"),
+                    data.get("is_favorite"),
                     contact_id,
                 ),
             )

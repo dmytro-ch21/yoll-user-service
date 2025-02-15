@@ -1113,7 +1113,7 @@
     "/api/user/contacts": {
       "post": {
         "summary": "Create a new contact for a user",
-        "description": "Creates a new contact. The request body must include the user_id and full_name along with any other contact details.",
+        "description": "Creates a new contact. **Required fields**: user_id and full_name. All other fields are optional. You may include any extra fields for additional details.",
         "tags": ["Contacts"],
         "requestBody": {
           "required": true,
@@ -1129,15 +1129,15 @@
                   },
                   "full_name": {
                     "type": "string",
-                    "example": "John Doe"
+                    "example": "Alice Doe"
                   },
                   "phone_number": {
                     "type": "string",
-                    "example": "123-456-7890"
+                    "example": "555-5555"
                   },
                   "email": {
                     "type": "string",
-                    "example": "john.doe@example.com"
+                    "example": "alice@example.com"
                   },
                   "street": {
                     "type": "string",
@@ -1145,15 +1145,15 @@
                   },
                   "city": {
                     "type": "string",
-                    "example": "Anytown"
+                    "example": "New York"
                   },
                   "state": {
                     "type": "string",
-                    "example": "CA"
+                    "example": "NY"
                   },
                   "postal_code": {
                     "type": "string",
-                    "example": "90210"
+                    "example": "10001"
                   },
                   "country": {
                     "type": "string",
@@ -1161,11 +1161,27 @@
                   },
                   "additional_info": {
                     "type": "string",
-                    "example": "VIP client"
+                    "example": "Extra info"
                   },
                   "base64_image": {
                     "type": "string",
-                    "example": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."
+                    "example": "base64encodedstring"
+                  },
+                  "is_favorite": {
+                    "type": "boolean",
+                    "example": true
+                  },
+                  "instagram_link": {
+                    "type": "string",
+                    "example": "https://instagram.com/username"
+                  },
+                  "facebook_link": {
+                    "type": "string",
+                    "example": "https://facebook.com/username"
+                  },
+                  "x_link": {
+                    "type": "string",
+                    "example": "https://x.com/username"
                   }
                 }
               }
@@ -1371,18 +1387,9 @@
         }
       },
       "put": {
-        "summary": "Update a contact",
-        "description": "Updates the details of a contact. The request body must include user_id (to verify ownership) along with any updated fields.",
+        "summary": "Update contact details",
+        "description": "Updates a contact. **Required field**: user_id. Other fields (such as full_name, phone_number, email, etc.) are optional. Only the provided fields will be updated. This means if you want to update only one field, just send that field along with user_id; all unspecified fields remain unchanged.",
         "tags": ["Contacts"],
-        "parameters": [
-          {
-            "name": "user_id",
-            "in": "query",
-            "required": true,
-            "schema": { "type": "integer" },
-            "description": "ID of the user"
-          }
-        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -1391,31 +1398,65 @@
                 "type": "object",
                 "required": ["user_id"],
                 "properties": {
-                  "user_id": { "type": "integer", "example": 1 },
+                  "user_id": {
+                    "type": "integer",
+                    "example": 1
+                  },
                   "full_name": {
                     "type": "string",
-                    "example": "John Doe Updated"
+                    "example": "Alice Doe"
                   },
                   "phone_number": {
                     "type": "string",
-                    "example": "987-654-3210"
+                    "example": "555-5555"
                   },
                   "email": {
                     "type": "string",
-                    "example": "john.updated@example.com"
+                    "example": "alice@example.com"
                   },
-                  "street": { "type": "string", "example": "456 Elm St" },
-                  "city": { "type": "string", "example": "Othertown" },
-                  "state": { "type": "string", "example": "NY" },
-                  "postal_code": { "type": "string", "example": "12345" },
-                  "country": { "type": "string", "example": "USA" },
+                  "street": {
+                    "type": "string",
+                    "example": "123 Main St"
+                  },
+                  "city": {
+                    "type": "string",
+                    "example": "New York"
+                  },
+                  "state": {
+                    "type": "string",
+                    "example": "NY"
+                  },
+                  "postal_code": {
+                    "type": "string",
+                    "example": "10001"
+                  },
+                  "country": {
+                    "type": "string",
+                    "example": "USA"
+                  },
                   "additional_info": {
                     "type": "string",
-                    "example": "Updated info"
+                    "example": "Extra info"
                   },
                   "base64_image": {
                     "type": "string",
-                    "example": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."
+                    "example": "base64encodedstring"
+                  },
+                  "is_favorite": {
+                    "type": "boolean",
+                    "example": true
+                  },
+                  "instagram_link": {
+                    "type": "string",
+                    "example": "https://instagram.com/username"
+                  },
+                  "facebook_link": {
+                    "type": "string",
+                    "example": "https://facebook.com/username"
+                  },
+                  "x_link": {
+                    "type": "string",
+                    "example": "https://x.com/username"
                   }
                 }
               }
